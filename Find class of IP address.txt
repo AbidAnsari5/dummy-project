@@ -1,0 +1,78 @@
+Prog: Find the class of IP address.
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+int digit(char *d);
+int digit(char *d)
+{
+        while(*d)
+        {
+                if(*d>='0' && *d<='9')
+                        ++d;
+                else
+                        return 1;
+        }
+        return 0;
+}
+int main()
+{
+        int n,dots=0,a,l;
+        char *ip,*temp;
+        ip=(char *)malloc(sizeof(char)*50);
+        printf("enter an IP address for finding the class:\n");
+        scanf("%s",ip);
+        l=strlen(ip);
+        if(ip==NULL)
+                return 0;
+        if(*(ip+(l-1))=='.')
+        {
+                printf("invalid IP\n");
+                return 0;
+        }
+        temp=strtok(ip,".");
+	while(temp)
+        {
+                if(digit(temp))
+                {
+                        printf("not a valid IP,it should be numeric value\n");
+                        return 0;
+                }
+                n=atoi(temp);
+                if(n>0 && n<=255)
+                {
+                        temp=strtok(NULL,".");
+                        if(temp!=NULL)
+                                ++dots;
+                        if(dots==1)
+                                a=n;
+                }
+                else
+                {
+                        printf("invalid IP,out of range\n");
+                        return 0;
+                }
+        }
+ 	if(dots==3)
+        {
+                if(a>=1 && a<=126)
+                        printf("CLASS A IP address\n");
+                else if(a>=128 && a<=191)
+                        printf("CLASS B IP address\n");
+                else if(a>=192 && a<=223)
+                        printf("CLASS C IP address\n");
+                else if(a>=224 && a<=239)
+                        printf("CLASS D IP address\n");
+                else if(a>=240 && a<=254)
+                        printf("CLASS E IP address\n");
+                else if(a==127)
+                        printf("IT IS RESERVED FOR LOOPBACK\n");
+                else if(a==255)
+                        printf("IT IS A BROADCAST IP\n");
+        }
+        else
+                printf("not a valid IP,it should be 4 octets\n");
+        return 0;
+}
+
+
